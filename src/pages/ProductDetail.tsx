@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
@@ -12,7 +11,7 @@ import {
   Home, 
   Package, 
   Info, 
-  Tool, 
+  Wrench, 
   Truck 
 } from 'lucide-react';
 import Navbar from '../components/Navbar';
@@ -20,7 +19,6 @@ import Footer from '../components/Footer';
 import ProductCard, { ProductType } from '../components/ProductCard';
 import CtaSection from '../components/CtaSection';
 
-// Define broader product type with additional fields for detail page
 interface ProductDetailType extends ProductType {
   description: string;
   specifications: { label: string; value: string }[];
@@ -36,7 +34,6 @@ const ProductDetail = () => {
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   
-  // Mock products data with extended fields
   const productsData: ProductDetailType[] = [
     {
       id: 1,
@@ -197,7 +194,6 @@ const ProductDetail = () => {
   ];
   
   useEffect(() => {
-    // Simulate API fetch
     setLoading(true);
     setTimeout(() => {
       if (id) {
@@ -206,7 +202,6 @@ const ProductDetail = () => {
           setProduct(foundProduct);
           setActiveImage(foundProduct.image);
           
-          // Get related products (same category)
           const related = productsData
             .filter(p => p.category === foundProduct.category && p.id !== foundProduct.id)
             .slice(0, 3);
@@ -217,7 +212,6 @@ const ProductDetail = () => {
     }, 500);
   }, [id]);
   
-  // Additional product images (simulated)
   const productImages = product ? [
     product.image,
     "https://images.unsplash.com/photo-1580983218765-f663bec07b37?q=80&w=3270&auto=format&fit=crop",
@@ -266,7 +260,6 @@ const ProductDetail = () => {
       <Navbar />
       
       <main className="flex-grow pt-24">
-        {/* Breadcrumb */}
         <div className="container-custom py-4">
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <Link to="/" className="hover:text-blue-medium flex items-center">
@@ -286,11 +279,9 @@ const ProductDetail = () => {
           </div>
         </div>
         
-        {/* Product Detail Section */}
         <section className="py-8">
           <div className="container-custom">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              {/* Product Images */}
               <div>
                 <div className="mb-4 rounded-xl overflow-hidden border border-gray-100">
                   <img 
@@ -319,7 +310,6 @@ const ProductDetail = () => {
                 </div>
               </div>
               
-              {/* Product Details */}
               <div>
                 <div className="mb-2 flex flex-wrap gap-2">
                   <span className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-3 py-1 rounded-full text-xs font-medium">
@@ -424,7 +414,7 @@ const ProductDetail = () => {
                     <span>Tersedia bantuan teknis untuk setup dan penggunaan</span>
                   </div>
                   <div className="flex items-center text-gray-600 text-sm">
-                    <Tool size={16} className="mr-2 text-blue-medium" />
+                    <Wrench size={16} className="mr-2 text-blue-medium" />
                     <span>Garansi resmi selama 1 tahun</span>
                   </div>
                 </div>
@@ -433,11 +423,9 @@ const ProductDetail = () => {
           </div>
         </section>
         
-        {/* Product Details Tabs */}
         <section className="py-8 bg-gray-50">
           <div className="container-custom">
             <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-              {/* Tabs Navigation */}
               <div className="flex border-b border-gray-200">
                 <button 
                   className={`px-6 py-4 text-sm font-medium ${
@@ -471,7 +459,6 @@ const ProductDetail = () => {
                 </button>
               </div>
               
-              {/* Tab Content */}
               <div className="p-6">
                 {activeTab === 'description' && (
                   <div>
@@ -533,7 +520,6 @@ const ProductDetail = () => {
           </div>
         </section>
         
-        {/* Delivery & Rental Information */}
         <section className="py-12">
           <div className="container-custom">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -572,7 +558,6 @@ const ProductDetail = () => {
           </div>
         </section>
         
-        {/* Related Products */}
         <section className="py-12 bg-gray-50">
           <div className="container-custom">
             <h2 className="text-2xl font-bold text-blue-dark mb-8">Produk Terkait</h2>
@@ -591,7 +576,6 @@ const ProductDetail = () => {
           </div>
         </section>
         
-        {/* Call to Action */}
         <CtaSection />
       </main>
       
