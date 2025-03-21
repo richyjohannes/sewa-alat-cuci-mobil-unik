@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, Info, Clock, Check, ShoppingBag, Settings, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
@@ -9,8 +9,13 @@ import CtaSection from '../components/CtaSection';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import PackageCard from '../components/PackageCard';
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
+  const isMobile = useIsMobile();
+  const isMobileSmall = typeof window !== 'undefined' ? window.innerWidth <= 450 : false;
+  
   // Featured products data
   const featuredProducts: ProductType[] = [
     {
@@ -134,6 +139,46 @@ const Index = () => {
     }
   ];
   
+  // Function to render the package section
+  const renderPackageSection = () => {
+    if (isMobileSmall) {
+      return (
+        <Carousel className="w-full">
+          <CarouselContent>
+            {servicePackages.map((pkg, index) => (
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <PackageCard 
+                  title={pkg.title}
+                  price={pkg.price}
+                  features={pkg.features}
+                  popular={pkg.popular}
+                  ctaText={pkg.ctaText}
+                  onClick={() => window.location.href = "/products"}
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      );
+    } else {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {servicePackages.map((pkg, index) => (
+            <PackageCard 
+              key={index}
+              title={pkg.title}
+              price={pkg.price}
+              features={pkg.features}
+              popular={pkg.popular}
+              ctaText={pkg.ctaText}
+              onClick={() => window.location.href = "/products"}
+            />
+          ))}
+        </div>
+      );
+    }
+  };
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -142,37 +187,25 @@ const Index = () => {
       <HeroSection />
       
       {/* Package Section */}
-      <section className="section-padding bg-white">
+      <section className="py-12 md:py-16 bg-white">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center max-w-3xl mx-auto mb-8">
             <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-4">
               Paket Cuci Mobil
             </h5>
-            <h2 className="text-3xl md:text-4xl font-bold text-blue-dark mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-blue-dark mb-4">
               Pilih Paket Yang Tepat Untuk Anda
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm">
               Kami menyediakan berbagai paket peralatan cuci mobil untuk kebutuhan Anda.
               Dari paket basic hingga professional, semua dengan kualitas terbaik.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-8">
-            {servicePackages.map((pkg, index) => (
-              <PackageCard 
-                key={index}
-                title={pkg.title}
-                price={pkg.price}
-                features={pkg.features}
-                popular={pkg.popular}
-                ctaText={pkg.ctaText}
-                onClick={() => window.location.href = "/products"}
-              />
-            ))}
-          </div>
+          {renderPackageSection()}
           
-          <div className="text-center mt-8">
-            <Link to="/contact" className="inline-flex items-center text-blue-medium hover:text-blue-dark transition-colors">
+          <div className="text-center mt-6">
+            <Link to="/contact" className="inline-flex items-center text-blue-medium hover:text-blue-dark transition-colors text-sm">
               <span className="mr-2">Butuh paket khusus? Hubungi kami</span>
               <ArrowRight size={16} />
             </Link>
@@ -181,63 +214,63 @@ const Index = () => {
       </section>
       
       {/* Features Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="py-12 md:py-16 bg-gray-50">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center max-w-3xl mx-auto mb-8">
             <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-4">
               Mengapa Memilih Kami
             </h5>
-            <h2 className="text-3xl md:text-4xl font-bold text-blue-dark mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-blue-dark mb-4">
               Solusi Peralatan Cuci Mobil Terlengkap
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm">
               Kami menyediakan berbagai peralatan cuci mobil berkualitas tinggi untuk kebutuhan Anda. 
               Didukung oleh tim profesional yang siap membantu Anda.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* Feature 1 */}
-            <div className="glass-card p-6 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-light bg-opacity-10 text-blue-medium mb-4">
-                <ShoppingBag size={28} />
+            <div className="glass-card p-4 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-light bg-opacity-10 text-blue-medium mb-3">
+                <ShoppingBag size={20} />
               </div>
-              <h3 className="text-xl font-semibold text-blue-dark mb-2">Berbagai Pilihan</h3>
-              <p className="text-gray-600">
-                Menyediakan berbagai pilihan merek dan tipe peralatan cuci mobil untuk kebutuhan Anda.
+              <h3 className="text-base font-semibold text-blue-dark mb-2">Berbagai Pilihan</h3>
+              <p className="text-gray-600 text-xs">
+                Berbagai pilihan merek dan tipe peralatan cuci mobil.
               </p>
             </div>
             
             {/* Feature 2 */}
-            <div className="glass-card p-6 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-light bg-opacity-10 text-blue-medium mb-4">
-                <Check size={28} />
+            <div className="glass-card p-4 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-light bg-opacity-10 text-blue-medium mb-3">
+                <Check size={20} />
               </div>
-              <h3 className="text-xl font-semibold text-blue-dark mb-2">Kualitas Terjamin</h3>
-              <p className="text-gray-600">
-                Semua peralatan yang kami sediakan telah melalui pengecekan kualitas yang ketat.
+              <h3 className="text-base font-semibold text-blue-dark mb-2">Kualitas Terjamin</h3>
+              <p className="text-gray-600 text-xs">
+                Semua peralatan telah melalui pengecekan kualitas yang ketat.
               </p>
             </div>
             
             {/* Feature 3 */}
-            <div className="glass-card p-6 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-light bg-opacity-10 text-blue-medium mb-4">
-                <Clock size={28} />
+            <div className="glass-card p-4 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-light bg-opacity-10 text-blue-medium mb-3">
+                <Clock size={20} />
               </div>
-              <h3 className="text-xl font-semibold text-blue-dark mb-2">Pengiriman Cepat</h3>
-              <p className="text-gray-600">
-                Pengiriman dan pengambilan peralatan yang cepat dan tepat waktu.
+              <h3 className="text-base font-semibold text-blue-dark mb-2">Pengiriman Cepat</h3>
+              <p className="text-gray-600 text-xs">
+                Pengiriman dan pengambilan peralatan yang cepat.
               </p>
             </div>
             
             {/* Feature 4 */}
-            <div className="glass-card p-6 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-light bg-opacity-10 text-blue-medium mb-4">
-                <Settings size={28} />
+            <div className="glass-card p-4 text-center">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-light bg-opacity-10 text-blue-medium mb-3">
+                <Settings size={20} />
               </div>
-              <h3 className="text-xl font-semibold text-blue-dark mb-2">Dukungan Teknis</h3>
-              <p className="text-gray-600">
-                Tim teknisi kami siap membantu jika ada masalah dengan peralatan Anda.
+              <h3 className="text-base font-semibold text-blue-dark mb-2">Dukungan Teknis</h3>
+              <p className="text-gray-600 text-xs">
+                Tim teknisi kami siap membantu jika ada masalah.
               </p>
             </div>
           </div>
@@ -245,24 +278,24 @@ const Index = () => {
       </section>
       
       {/* Featured Products Section */}
-      <section className="section-padding">
+      <section className="py-12 md:py-16">
         <div className="container-custom">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
             <div>
-              <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-3">
                 Produk Unggulan
               </h5>
-              <h2 className="text-3xl md:text-4xl font-bold text-blue-dark">
+              <h2 className="text-2xl md:text-3xl font-bold text-blue-dark">
                 Peralatan Terbaik Untuk Anda
               </h2>
             </div>
-            <Link to="/products" className="mt-4 md:mt-0 flex items-center text-blue-medium hover:text-blue-dark transition-colors">
+            <Link to="/products" className="mt-3 md:mt-0 flex items-center text-blue-medium hover:text-blue-dark transition-colors text-sm">
               <span className="font-medium">Lihat Semua Produk</span>
-              <ArrowRight size={18} className="ml-2" />
+              <ArrowRight size={16} className="ml-1" />
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -271,69 +304,69 @@ const Index = () => {
       </section>
       
       {/* How it Works Section */}
-      <section className="section-padding bg-gray-50">
+      <section className="py-12 md:py-16 bg-gray-50">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-3">
               Cara Kerja
             </h5>
-            <h2 className="text-3xl md:text-4xl font-bold text-blue-dark mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-blue-dark mb-4">
               Sewa Peralatan Dengan Mudah
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm">
               Proses penyewaan peralatan cuci mobil dari kami sangat mudah dan cepat. 
               Ikuti langkah-langkah sederhana di bawah ini.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Step 1 */}
-            <div className="glass-card p-6 relative animate-fade-in">
-              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-yellow flex items-center justify-center text-blue-dark font-bold shadow-lg">
+            <div className="glass-card p-4 relative animate-fade-in">
+              <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-yellow flex items-center justify-center text-blue-dark font-bold shadow-lg text-sm">
                 1
               </div>
-              <div className="pt-6">
-                <h3 className="text-xl font-semibold text-blue-dark mb-4">Pilih Peralatan</h3>
-                <p className="text-gray-600 mb-4">
-                  Pilih peralatan yang Anda butuhkan dari katalog kami. Tentukan juga durasi penyewaan yang diinginkan.
+              <div className="pt-4">
+                <h3 className="text-lg font-semibold text-blue-dark mb-2">Pilih Peralatan</h3>
+                <p className="text-gray-600 mb-3 text-sm">
+                  Pilih peralatan yang Anda butuhkan dari katalog kami. Tentukan juga durasi penyewaan.
                 </p>
-                <Link to="/products" className="text-blue-medium hover:text-blue-dark transition-colors flex items-center">
+                <Link to="/products" className="text-blue-medium hover:text-blue-dark transition-colors flex items-center text-sm">
                   <span>Lihat Katalog</span>
-                  <ArrowRight size={16} className="ml-1" />
+                  <ArrowRight size={14} className="ml-1" />
                 </Link>
               </div>
             </div>
             
             {/* Step 2 */}
-            <div className="glass-card p-6 relative animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-yellow flex items-center justify-center text-blue-dark font-bold shadow-lg">
+            <div className="glass-card p-4 relative animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-yellow flex items-center justify-center text-blue-dark font-bold shadow-lg text-sm">
                 2
               </div>
-              <div className="pt-6">
-                <h3 className="text-xl font-semibold text-blue-dark mb-4">Hubungi Kami</h3>
-                <p className="text-gray-600 mb-4">
-                  Hubungi kami melalui telepon, WhatsApp, atau email untuk mengkonfirmasi ketersediaan peralatan.
+              <div className="pt-4">
+                <h3 className="text-lg font-semibold text-blue-dark mb-2">Hubungi Kami</h3>
+                <p className="text-gray-600 mb-3 text-sm">
+                  Hubungi kami melalui telepon, WhatsApp, atau email untuk konfirmasi ketersediaan.
                 </p>
-                <Link to="/contact" className="text-blue-medium hover:text-blue-dark transition-colors flex items-center">
+                <Link to="/contact" className="text-blue-medium hover:text-blue-dark transition-colors flex items-center text-sm">
                   <span>Kontak Kami</span>
-                  <ArrowRight size={16} className="ml-1" />
+                  <ArrowRight size={14} className="ml-1" />
                 </Link>
               </div>
             </div>
             
             {/* Step 3 */}
-            <div className="glass-card p-6 relative animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-yellow flex items-center justify-center text-blue-dark font-bold shadow-lg">
+            <div className="glass-card p-4 relative animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-yellow flex items-center justify-center text-blue-dark font-bold shadow-lg text-sm">
                 3
               </div>
-              <div className="pt-6">
-                <h3 className="text-xl font-semibold text-blue-dark mb-4">Terima Peralatan</h3>
-                <p className="text-gray-600 mb-4">
-                  Kami akan mengirimkan peralatan ke lokasi Anda atau Anda dapat mengambilnya di toko kami.
+              <div className="pt-4">
+                <h3 className="text-lg font-semibold text-blue-dark mb-2">Terima Peralatan</h3>
+                <p className="text-gray-600 mb-3 text-sm">
+                  Kami akan mengirimkan peralatan ke lokasi Anda atau Anda dapat mengambilnya.
                 </p>
-                <div className="text-blue-medium hover:text-blue-dark transition-colors flex items-center">
-                  <Info size={16} className="mr-1" />
-                  <span>Syarat & Ketentuan Berlaku</span>
+                <div className="text-blue-medium hover:text-blue-dark transition-colors flex items-center text-sm">
+                  <Info size={14} className="mr-1" />
+                  <span>Syarat & Ketentuan</span>
                 </div>
               </div>
             </div>
@@ -342,22 +375,21 @@ const Index = () => {
       </section>
       
       {/* Testimonials Section */}
-      <section className="section-padding">
+      <section className="py-12 md:py-16">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-3">
               Testimonial
             </h5>
-            <h2 className="text-3xl md:text-4xl font-bold text-blue-dark mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-blue-dark mb-4">
               Apa Kata Pelanggan Kami
             </h2>
-            <p className="text-gray-600">
-              Pendapat jujur dari pelanggan yang telah menggunakan layanan kami. 
-              Kami bangga dengan tingkat kepuasan pelanggan yang tinggi.
+            <p className="text-gray-600 text-sm">
+              Pendapat jujur dari pelanggan yang telah menggunakan layanan kami.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {testimonials.map((testimonial) => (
               <Testimonial key={testimonial.id} testimonial={testimonial} />
             ))}

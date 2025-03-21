@@ -27,7 +27,7 @@ const PackageCard: React.FC<PackageCardProps> = ({
   return (
     <div className={`rounded-xl overflow-hidden transition-all duration-300 h-full flex flex-col ${
       popular 
-        ? 'shadow-lg border-2 border-yellow transform hover:-translate-y-1 scale-105' 
+        ? 'shadow-lg border-2 border-yellow transform hover:-translate-y-1' 
         : 'shadow-sm border border-gray-100 hover:shadow-md'
     }`}>
       {popular && (
@@ -36,25 +36,25 @@ const PackageCard: React.FC<PackageCardProps> = ({
         </div>
       )}
       
-      <div className="p-6 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-blue-dark mb-2">{title}</h3>
+      <div className="p-5 flex flex-col flex-grow">
+        <h3 className="text-lg font-bold text-blue-dark mb-2">{title}</h3>
         
-        <div className="mt-2 mb-6">
-          <span className="text-3xl font-bold text-blue-dark">{price}</span>
+        <div className="mt-2 mb-4">
+          <span className="text-2xl font-bold text-blue-dark">{price}</span>
           <span className="text-gray-500 ml-1">/paket</span>
         </div>
         
-        <div className="space-y-3 mb-6 flex-grow">
+        <div className="space-y-2 mb-6 flex-grow">
           {features.map((feature, index) => (
             <div key={index} className="flex items-start">
-              <div className={`rounded-full p-1 mr-3 ${
+              <div className={`rounded-full p-1 mr-2 ${
                 feature.included 
                   ? 'text-green-500 bg-green-50' 
                   : 'text-gray-300 bg-gray-50'
               }`}>
-                <Check size={14} />
+                <Check size={12} />
               </div>
-              <span className={feature.included ? 'text-gray-700' : 'text-gray-400'}>
+              <span className={`text-sm ${feature.included ? 'text-gray-700' : 'text-gray-400'}`}>
                 {feature.name}
               </span>
             </div>
@@ -63,7 +63,7 @@ const PackageCard: React.FC<PackageCardProps> = ({
         
         <button
           onClick={onClick}
-          className={`w-full py-2.5 rounded-lg font-medium transition-colors ${
+          className={`w-full py-2 rounded-lg font-medium transition-colors ${
             popular 
               ? 'bg-yellow hover:bg-yellow-light text-blue-dark' 
               : 'bg-blue-light hover:bg-blue-medium text-white'
