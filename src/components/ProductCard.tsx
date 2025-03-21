@@ -13,6 +13,8 @@ export interface ProductType {
   rentalPrice: string;
   salesPrice: string;
   isAvailable: boolean;
+  isNew?: boolean;
+  isPopular?: boolean;
 }
 
 interface ProductCardProps {
