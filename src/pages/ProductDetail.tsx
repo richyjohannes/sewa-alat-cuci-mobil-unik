@@ -5,6 +5,7 @@ import {
   Star, 
   Check, 
   ShoppingBag, 
+  ShoppingCart,
   Clock, 
   Tag, 
   ChevronRight, 
@@ -33,6 +34,7 @@ const ProductDetail = () => {
   const [activeTab, setActiveTab] = useState<'description' | 'specifications' | 'features'>('description');
   const [activeImage, setActiveImage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const [quantity, setQuantity] = useState(1);
   
   const productsData: ProductDetailType[] = [
     {
@@ -214,10 +216,31 @@ const ProductDetail = () => {
   
   const productImages = product ? [
     product.image,
-    "https://images.unsplash.com/photo-1580983218765-f663bec07b37?q=80&w=3270&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1580983218765-f663bec07b37?q=80&w=3347&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1602337442860-62df41f73c36?q=80&w=3432&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1664911979855-ec4146b7ca40?q=80&w=3270&auto=format&fit=crop",
   ] : [];
+  
+  const handleAddToCart = () => {
+    if (!product) return;
+    
+    const rentalPriceStr = product.rentalPrice.replace('Rp ', '').replace('.', '').replace(',', '');
+    const rentalPrice = parseInt(rentalPriceStr, 10) || 0;
+    
+    const total = rentalPrice * quantity;
+    const formattedTotal = new Intl.NumberFormat('id-ID', { 
+      style: 'currency', 
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(total);
+    
+    const message = `Halo, saya tertarik dengan produk *${product.name}*\n\nDetail:\n- Kategori: ${product.category}\n- Harga Sewa: ${product.rentalPrice}/hari\n- Jumlah: ${quantity} item\n- Total: ${formattedTotal}\n\nMohon informasi lebih lanjut. Terima kasih.`;
+    
+    const encodedMessage = encodeURIComponent(message);
+    
+    window.open(`https://wa.me/6281573635143?text=${encodedMessage}`, '_blank');
+  };
   
   if (loading) {
     return (
@@ -384,19 +407,45 @@ const ProductDetail = () => {
                   </ul>
                 </div>
                 
+                <div className="mb-6">
+                  <div className="flex items-center mb-2">
+                    <label htmlFor="quantity" className="text-gray-700 mr-3">Jumlah:</label>
+                    <div className="flex items-center border border-gray-300 rounded-lg">
+                      <button 
+                        className="px-3 py-1 text-blue-medium hover:bg-blue-light hover:text-white transition-colors"
+                        onClick={() => setQuantity(prev => prev > 1 ? prev - 1 : 1)}
+                      >
+                        -
+                      </button>
+                      <input 
+                        type="number" 
+                        id="quantity"
+                        className="w-12 text-center border-0 focus:outline-none focus:ring-0"
+                        value={quantity}
+                        min="1"
+                        onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                      />
+                      <button 
+                        className="px-3 py-1 text-blue-medium hover:bg-blue-light hover:text-white transition-colors"
+                        onClick={() => setQuantity(prev => prev + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a 
-                    href={`https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20${product.name}%20untuk%20${product.isAvailable ? 'disewa' : 'dibeli'}.%20Mohon%20informasi%20lebih%20lanjut.`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={handleAddToCart}
                     className="btn-primary flex-1 flex items-center justify-center"
                   >
-                    <ShoppingBag size={18} className="mr-2" />
-                    <span>{product.isAvailable ? 'Pesan Sekarang' : 'Tanya Ketersediaan'}</span>
-                  </a>
+                    <ShoppingCart size={18} className="mr-2" />
+                    <span>Pesan Sekarang</span>
+                  </button>
                   
                   <a 
-                    href="tel:+6281234567890" 
+                    href="tel:+6281573635143" 
                     className="btn-outline flex-1 flex items-center justify-center"
                   >
                     <Clock size={18} className="mr-2" />

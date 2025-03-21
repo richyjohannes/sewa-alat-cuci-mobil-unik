@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, Tag, Eye } from 'lucide-react';
+import { Clock, Tag, Eye, ShoppingCart } from 'lucide-react';
 
 export interface ProductType {
   id: number;
@@ -20,6 +20,12 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const handleAddToCart = () => {
+    const message = `Halo, saya tertarik dengan produk *${product.name}*\n\nDetail:\n- Kategori: ${product.category}\n- Harga Sewa: ${product.rentalPrice}/hari\n- Harga Beli: ${product.salesPrice}\n\nMohon informasi lebih lanjut. Terima kasih.`;
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/6281573635143?text=${encodedMessage}`, '_blank');
+  };
+
   return (
     <div className="rounded-xl overflow-hidden bg-white shadow-card card-hover h-full flex flex-col">
       <div className="relative">
@@ -82,14 +88,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
           </div>
           
-          {/* Call to action */}
-          <Link 
-            to={`/product/${product.id}`} 
-            className="mt-3 inline-block w-full text-center bg-blue-medium hover:bg-blue-dark text-white py-2 rounded-lg transition-colors flex items-center justify-center"
-          >
-            <Eye size={16} className="mr-2" />
-            Lihat Detail
-          </Link>
+          {/* Call to action buttons */}
+          <div className="grid grid-cols-2 gap-2 mt-3">
+            <Link 
+              to={`/product/${product.id}`} 
+              className="text-center bg-blue-medium hover:bg-blue-dark text-white py-2 rounded-lg transition-colors flex items-center justify-center"
+            >
+              <Eye size={16} className="mr-1" />
+              Detail
+            </Link>
+            <button
+              onClick={handleAddToCart}
+              className="text-center bg-yellow hover:bg-yellow-light text-blue-dark font-medium py-2 rounded-lg transition-colors flex items-center justify-center"
+            >
+              <ShoppingCart size={16} className="mr-1" />
+              Pesan
+            </button>
+          </div>
         </div>
       </div>
     </div>

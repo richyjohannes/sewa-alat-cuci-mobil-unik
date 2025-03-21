@@ -317,7 +317,7 @@ const Products = () => {
               </div>
               
               {filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-[450px]:grid-cols-2 gap-4 md:gap-6">
                   {filteredProducts.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -363,7 +363,7 @@ const Products = () => {
                   <ShoppingBag size={18} className="mr-2" />
                   Hubungi Kami
                 </Link>
-                <a href="tel:+6281234567890" className="btn-outline flex items-center justify-center">
+                <a href="tel:+6281573635143" className="btn-outline flex items-center justify-center">
                   <Clock size={18} className="mr-2" />
                   Konsultasi Cepat
                 </a>
