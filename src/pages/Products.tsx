@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Home, ChevronRight, Tag, ShoppingBag, Clock } from 'lucide-react';
+import { Search, Home, ChevronRight, ShoppingBag, Clock } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProductCard, { ProductType } from '../components/ProductCard';
+import { Slider } from '../components/ui/slider';
 
 const Products = () => {
   // All products data
@@ -15,8 +16,6 @@ const Products = () => {
       category: "Pressure Washer",
       rentalPrice: "Rp 250.000",
       salesPrice: "Rp 5.500.000",
-      isNew: true,
-      isPopular: true,
       isAvailable: true
     },
     {
@@ -26,7 +25,6 @@ const Products = () => {
       category: "Foam Cannon",
       rentalPrice: "Rp 100.000",
       salesPrice: "Rp 1.200.000",
-      isPopular: true,
       isAvailable: true
     },
     {
@@ -45,7 +43,6 @@ const Products = () => {
       category: "Polisher",
       rentalPrice: "Rp 200.000",
       salesPrice: "Rp 4.500.000",
-      isNew: true,
       isAvailable: false
     },
     {
@@ -64,7 +61,6 @@ const Products = () => {
       category: "Foam Cannon",
       rentalPrice: "Rp 80.000",
       salesPrice: "Rp 900.000",
-      isPopular: true,
       isAvailable: true
     },
     {
@@ -74,7 +70,6 @@ const Products = () => {
       category: "Dryer",
       rentalPrice: "Rp 120.000",
       salesPrice: "Rp 2.800.000",
-      isNew: true,
       isAvailable: true
     },
     {
@@ -102,7 +97,6 @@ const Products = () => {
       category: "Polisher",
       rentalPrice: "Rp 180.000",
       salesPrice: "Rp 3.800.000",
-      isPopular: true,
       isAvailable: true
     },
     {
@@ -125,38 +119,60 @@ const Products = () => {
     }
   ];
   
-  // Define categories
-  const categories = [
-    'All',
-    'Pressure Washer',
-    'Foam Cannon',
-    'Vacuum Cleaner',
-    'Polisher',
-    'Steam Cleaner',
-    'Dryer',
-    'Carpet Cleaner', 
-    'Generator'
-  ];
-  
   // States
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showRentalOnly, setShowRentalOnly] = useState(false);
   const [showAvailableOnly, setShowAvailableOnly] = useState(false);
+  const [priceRange, setPriceRange] = useState([0, 10000000]); // in IDR
+  const [sortOrder, setSortOrder] = useState('newest');
+  
+  // Extract prices as numbers
+  const getNumericPrice = (priceStr: string) => {
+    return parseInt(priceStr.replace(/Rp |\.|\,/g, ''), 10);
+  };
+  
+  // Format price for display
+  const formatPrice = (price: number) => {
+    return `Rp ${price.toLocaleString('id-ID')}`;
+  };
   
   // Filter products
-  const filteredProducts = allProducts.filter(product => {
+  let filteredProducts = allProducts.filter(product => {
     // Filter by search term
     const matchesSearchTerm = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    // Filter by category
-    const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
     
     // Filter by availability
     const matchesAvailability = !showAvailableOnly || product.isAvailable;
     
-    return matchesSearchTerm && matchesCategory && matchesAvailability;
+    // Filter by price range
+    const price = getNumericPrice(product.salesPrice);
+    const matchesPriceRange = price >= priceRange[0] && price <= priceRange[1];
+    
+    return matchesSearchTerm && matchesAvailability && matchesPriceRange;
   });
+  
+  // Sort products
+  switch(sortOrder) {
+    case 'price-low-high':
+      filteredProducts.sort((a, b) => 
+        getNumericPrice(a.salesPrice) - getNumericPrice(b.salesPrice)
+      );
+      break;
+    case 'price-high-low':
+      filteredProducts.sort((a, b) => 
+        getNumericPrice(b.salesPrice) - getNumericPrice(a.salesPrice)
+      );
+      break;
+    case 'name-az':
+      filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 'name-za':
+      filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+      break;
+    case 'newest':
+    default:
+      // Keep the default order (assuming newest first)
+      break;
+  }
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -173,7 +189,7 @@ const Products = () => {
               Peralatan Cuci Mobil <span className="text-yellow">Profesional</span>
             </h1>
             <p className="text-gray-200 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Pilih dari berbagai peralatan cuci mobil berkualitas tinggi. Tersedia untuk sewa harian atau pembelian.
+              Pilih dari berbagai peralatan cuci mobil berkualitas tinggi untuk kebutuhan Anda.
             </p>
             
             {/* Breadcrumb */}
@@ -226,67 +242,36 @@ const Products = () => {
           </div>
           
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Categories Sidebar */}
+            {/* Filters Sidebar */}
             <div className="lg:w-1/4">
               <div className="glass-card p-6">
-                <div className="flex items-center space-x-2 mb-4">
-                  <Filter size={18} className="text-blue-medium" />
-                  <h3 className="font-semibold text-blue-dark">Kategori</h3>
-                </div>
+                <h3 className="font-semibold text-blue-dark mb-6">Filter Harga</h3>
                 
-                <div className="space-y-2">
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                        selectedCategory === category
-                          ? 'bg-blue-light bg-opacity-10 text-blue-medium font-medium'
-                          : 'text-gray-700 hover:bg-gray-100'
-                      }`}
-                      onClick={() => setSelectedCategory(category)}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-                
-                <div className="mt-6 pt-6 border-t border-gray-100">
-                  <div className="flex items-center space-x-2 mb-4">
-                    <Tag size={18} className="text-blue-medium" />
-                    <h3 className="font-semibold text-blue-dark">Jenis</h3>
+                <div className="space-y-6">
+                  <Slider 
+                    defaultValue={[0, 10000000]} 
+                    max={10000000}
+                    step={100000}
+                    value={priceRange}
+                    onValueChange={(value) => setPriceRange(value)}
+                    className="mb-6"
+                  />
+                  
+                  <div className="flex justify-between text-sm text-gray-600">
+                    <span>{formatPrice(priceRange[0])}</span>
+                    <span>{formatPrice(priceRange[1])}</span>
                   </div>
                   
-                  <div className="space-y-3">
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="rentalOnly"
-                        className="mr-3"
-                        checked={showRentalOnly}
-                        onChange={() => setShowRentalOnly(!showRentalOnly)}
-                      />
-                      <label htmlFor="rentalOnly" className="text-sm text-gray-700">Sewa</label>
+                  <div className="mt-6 pt-6 border-t border-gray-100">
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600 mb-4">Butuh bantuan mencari produk?</p>
+                      <Link 
+                        to="/contact" 
+                        className="btn-outline w-full justify-center"
+                      >
+                        Hubungi Kami
+                      </Link>
                     </div>
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="salesOnly"
-                        className="mr-3"
-                      />
-                      <label htmlFor="salesOnly" className="text-sm text-gray-700">Penjualan</label>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="mt-6 pt-6 border-t border-gray-100">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-4">Butuh bantuan mencari produk?</p>
-                    <Link 
-                      to="/contact" 
-                      className="btn-outline w-full justify-center"
-                    >
-                      Hubungi Kami
-                    </Link>
                   </div>
                 </div>
               </div>
@@ -297,7 +282,7 @@ const Products = () => {
               <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
                 <div>
                   <h2 className="text-2xl font-bold text-blue-dark">
-                    {selectedCategory === 'All' ? 'Semua Produk' : selectedCategory}
+                    Produk Kami
                   </h2>
                   <p className="text-gray-600 text-sm">
                     Menampilkan {filteredProducts.length} produk
@@ -306,11 +291,16 @@ const Products = () => {
                 
                 <div className="mt-3 sm:mt-0 flex items-center space-x-2 text-sm">
                   <span className="text-gray-600">Urutkan:</span>
-                  <select className="border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-light">
-                    <option>Terbaru</option>
-                    <option>Harga: Rendah ke Tinggi</option>
-                    <option>Harga: Tinggi ke Rendah</option>
-                    <option>Nama: A-Z</option>
+                  <select 
+                    className="border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-light"
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                  >
+                    <option value="newest">Terbaru</option>
+                    <option value="price-low-high">Harga: Rendah ke Tinggi</option>
+                    <option value="price-high-low">Harga: Tinggi ke Rendah</option>
+                    <option value="name-az">Nama: A-Z</option>
+                    <option value="name-za">Nama: Z-A</option>
                   </select>
                 </div>
               </div>
@@ -331,9 +321,8 @@ const Products = () => {
                     className="btn-primary"
                     onClick={() => {
                       setSearchTerm('');
-                      setSelectedCategory('All');
                       setShowAvailableOnly(false);
-                      setShowRentalOnly(false);
+                      setPriceRange([0, 10000000]);
                     }}
                   >
                     Reset Filter

@@ -8,6 +8,7 @@ import Testimonial, { TestimonialType } from '../components/Testimonial';
 import CtaSection from '../components/CtaSection';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import PackageCard from '../components/PackageCard';
 
 const Index = () => {
   // Featured products data
@@ -19,8 +20,6 @@ const Index = () => {
       category: "Pressure Washer",
       rentalPrice: "Rp 250.000",
       salesPrice: "Rp 5.500.000",
-      isNew: true,
-      isPopular: true,
       isAvailable: true
     },
     {
@@ -30,7 +29,6 @@ const Index = () => {
       category: "Foam Cannon",
       rentalPrice: "Rp 100.000",
       salesPrice: "Rp 1.200.000",
-      isPopular: true,
       isAvailable: true
     },
     {
@@ -49,8 +47,59 @@ const Index = () => {
       category: "Polisher",
       rentalPrice: "Rp 200.000",
       salesPrice: "Rp 4.500.000",
-      isNew: true,
       isAvailable: false
+    }
+  ];
+
+  // Service packages
+  const servicePackages = [
+    {
+      title: "Paket Basic",
+      price: "Rp 499.000",
+      features: [
+        { name: "Pressure Washer Standar", included: true },
+        { name: "Foam Cannon Basic", included: true },
+        { name: "Microfiber Cloth (2 pcs)", included: true },
+        { name: "Car Shampoo 250ml", included: true },
+        { name: "Quick Detailer 100ml", included: false },
+        { name: "Interior Cleaner", included: false },
+        { name: "Tire Shine", included: false },
+        { name: "Premium Wax", included: false },
+      ],
+      popular: false,
+      ctaText: "Pilih Paket Basic"
+    },
+    {
+      title: "Paket Premium",
+      price: "Rp 899.000",
+      features: [
+        { name: "Pressure Washer Pro", included: true },
+        { name: "Foam Cannon Deluxe", included: true },
+        { name: "Microfiber Cloth (5 pcs)", included: true },
+        { name: "Car Shampoo 500ml", included: true },
+        { name: "Quick Detailer 250ml", included: true },
+        { name: "Interior Cleaner", included: true },
+        { name: "Tire Shine", included: false },
+        { name: "Premium Wax", included: false },
+      ],
+      popular: true,
+      ctaText: "Pilih Paket Premium"
+    },
+    {
+      title: "Paket Professional",
+      price: "Rp 1.499.000",
+      features: [
+        { name: "Pressure Washer Pro X2000", included: true },
+        { name: "Foam Cannon Deluxe Gold", included: true },
+        { name: "Microfiber Cloth (10 pcs)", included: true },
+        { name: "Car Shampoo 1L", included: true },
+        { name: "Quick Detailer 500ml", included: true },
+        { name: "Interior Cleaner", included: true },
+        { name: "Tire Shine", included: true },
+        { name: "Premium Wax", included: true },
+      ],
+      popular: false,
+      ctaText: "Pilih Paket Pro"
     }
   ];
 
@@ -92,6 +141,45 @@ const Index = () => {
       {/* Hero Section */}
       <HeroSection />
       
+      {/* Package Section */}
+      <section className="section-padding bg-white">
+        <div className="container-custom">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-4">
+              Paket Cuci Mobil
+            </h5>
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-dark mb-4">
+              Pilih Paket Yang Tepat Untuk Anda
+            </h2>
+            <p className="text-gray-600">
+              Kami menyediakan berbagai paket peralatan cuci mobil untuk kebutuhan Anda.
+              Dari paket basic hingga professional, semua dengan kualitas terbaik.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-8">
+            {servicePackages.map((pkg, index) => (
+              <PackageCard 
+                key={index}
+                title={pkg.title}
+                price={pkg.price}
+                features={pkg.features}
+                popular={pkg.popular}
+                ctaText={pkg.ctaText}
+                onClick={() => window.location.href = "/products"}
+              />
+            ))}
+          </div>
+          
+          <div className="text-center mt-8">
+            <Link to="/contact" className="inline-flex items-center text-blue-medium hover:text-blue-dark transition-colors">
+              <span className="mr-2">Butuh paket khusus? Hubungi kami</span>
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </section>
+      
       {/* Features Section */}
       <section className="section-padding bg-gray-50">
         <div className="container-custom">
@@ -103,7 +191,7 @@ const Index = () => {
               Solusi Peralatan Cuci Mobil Terlengkap
             </h2>
             <p className="text-gray-600">
-              Kami menyediakan berbagai peralatan cuci mobil berkualitas tinggi untuk sewa atau beli. 
+              Kami menyediakan berbagai peralatan cuci mobil berkualitas tinggi untuk kebutuhan Anda. 
               Didukung oleh tim profesional yang siap membantu Anda.
             </p>
           </div>

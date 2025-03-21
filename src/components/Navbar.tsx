@@ -1,7 +1,9 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, ShoppingCart } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import logo from '../assets/logo.png';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,41 +43,45 @@ const Navbar = () => {
   ];
   
   return (
-    <header className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
+    <header className={`fixed w-full z-50 transition-all duration-300 bg-white shadow-sm py-2`}>
       <div className="container-custom">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
+            <img src={logo} alt="MaxClean Logo" className="h-12 w-12 mr-2" />
             <div className="text-blue-dark font-bold text-xl md:text-2xl">
               <span className="text-gradient">MaxClean</span>
             </div>
           </Link>
           
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`relative font-medium text-sm transition-colors
+                className={`relative font-medium transition-colors px-2 py-1
                   ${isActive(link.path) 
-                    ? 'text-blue-dark after:content-[""] after:absolute after:bottom-[-6px] after:left-0 after:h-[3px] after:w-full after:bg-yellow' 
+                    ? 'text-blue-dark font-semibold' 
                     : 'text-slate-600 hover:text-blue-dark'
                   }`}
               >
                 {link.name}
+                {isActive(link.path) && (
+                  <span className="absolute bottom-0 left-0 h-0.5 w-full bg-yellow"></span>
+                )}
               </Link>
             ))}
             
             <Link 
               to="/cart" 
-              className={`relative ml-3 px-3 py-2 rounded-full ${
-                location.pathname === '/cart'
-                  ? 'bg-blue-light text-white'
+              className={`relative ml-3 p-2 rounded-full transition-colors
+                ${location.pathname === '/cart'
+                  ? 'bg-blue-light bg-opacity-10 text-blue-dark'
                   : 'hover:bg-blue-light hover:bg-opacity-10 text-blue-medium'
-              }`}
+                }`}
             >
-              <ShoppingCart size={20} />
+              <ShoppingCart size={22} />
               {getTotalItems() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-yellow text-blue-dark text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                <span className="absolute -top-1 -right-1 bg-yellow text-blue-dark text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
                   {getTotalItems()}
                 </span>
               )}
@@ -85,11 +91,11 @@ const Navbar = () => {
           <div className="flex items-center md:hidden">
             <Link 
               to="/cart" 
-              className="relative mr-4"
+              className="relative mr-4 text-blue-dark"
             >
-              <ShoppingCart size={20} className={isScrolled ? 'text-blue-dark' : 'text-white'} />
+              <ShoppingCart size={22} />
               {getTotalItems() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-yellow text-blue-dark text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                <span className="absolute -top-1 -right-1 bg-yellow text-blue-dark text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
                   {getTotalItems()}
                 </span>
               )}
