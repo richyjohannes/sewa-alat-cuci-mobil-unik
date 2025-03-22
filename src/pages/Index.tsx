@@ -12,7 +12,7 @@ import TestimonialsSection from '../components/sections/TestimonialsSection';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       
       {/* Hero Section */}

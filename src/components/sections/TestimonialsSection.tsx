@@ -1,8 +1,12 @@
 
 import React from 'react';
 import Testimonial, { TestimonialType } from '../Testimonial';
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { useSmallMobile } from '@/hooks/useSmallMobile';
 
 const TestimonialsSection = () => {
+  const isSmallMobile = useSmallMobile();
+  
   // Testimonials data
   const testimonials: TestimonialType[] = [
     {
@@ -34,14 +38,38 @@ const TestimonialsSection = () => {
     }
   ];
   
+  const renderTestimonials = () => {
+    if (isSmallMobile) {
+      return (
+        <Carousel className="w-full">
+          <CarouselContent>
+            {testimonials.map((testimonial) => (
+              <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/3">
+                <Testimonial testimonial={testimonial} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      );
+    } else {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {testimonials.map((testimonial) => (
+            <Testimonial key={testimonial.id} testimonial={testimonial} />
+          ))}
+        </div>
+      );
+    }
+  };
+  
   return (
-    <section className="py-12 md:py-16">
-      <div className="container-custom">
-        <div className="text-center max-w-3xl mx-auto mb-8">
-          <h5 className="inline-block bg-blue-light bg-opacity-10 text-blue-medium px-4 py-2 rounded-full text-sm font-medium mb-3">
+    <section className="py-10 md:py-14 bg-white">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div className="text-center max-w-xl mx-auto mb-8">
+          <h5 className="inline-block bg-blue-light/10 text-blue-medium px-3 py-1 rounded-full text-sm font-medium mb-3">
             Testimonial
           </h5>
-          <h2 className="text-2xl md:text-3xl font-bold text-blue-dark mb-4">
+          <h2 className="text-xl md:text-2xl font-bold text-blue-dark mb-3">
             Apa Kata Pelanggan Kami
           </h2>
           <p className="text-gray-600 text-sm">
@@ -49,11 +77,7 @@ const TestimonialsSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {testimonials.map((testimonial) => (
-            <Testimonial key={testimonial.id} testimonial={testimonial} />
-          ))}
-        </div>
+        {renderTestimonials()}
       </div>
     </section>
   );

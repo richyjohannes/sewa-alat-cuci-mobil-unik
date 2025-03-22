@@ -1,69 +1,108 @@
-# Welcome to your Lovable project
 
-## Project info
+# MaxClean - Professional Car Wash Equipment
 
-**URL**: https://lovable.dev/projects/c7a0258a-afc4-46da-a6e2-512fb9159248
+## Project Overview
 
-## How can I edit this code?
+MaxClean is a website for a car wash equipment business, offering both rental and purchase options for professional-grade equipment.
 
-There are several ways of editing your application.
+## Live Demo
 
-**Use Lovable**
+The site is deployed at: https://jr-repository.github.io/febri-web/
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c7a0258a-afc4-46da-a6e2-512fb9159248) and start prompting.
+## Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn-ui
+- Vite
 
-**Use your preferred IDE**
+## Development Setup
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Follow these steps to set up the project locally:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Clone the repository
+git clone https://github.com/jr-repository/febri-web.git
+cd febri-web
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Deployment to GitHub Pages
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Automatic Deployment
 
-**Use GitHub Codespaces**
+To deploy the site to GitHub Pages:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. Run the deployment script:
 
-## What technologies are used for this project?
+```sh
+# Make the script executable (on macOS/Linux)
+chmod +x deploy.sh
 
-This project is built with .
+# Run the deployment script
+./deploy.sh
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Manual Deployment
 
-## How can I deploy this project?
+If you prefer to deploy manually:
 
-Simply open [Lovable](https://lovable.dev/projects/c7a0258a-afc4-46da-a6e2-512fb9159248) and click on Share -> Publish.
+1. Build the project:
 
-## I want to use a custom domain - is that possible?
+```sh
+npm run build
+```
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+2. Deploy the built files:
+
+```sh
+cd dist
+git init
+git checkout -b main
+git add -A
+git commit -m 'deploy'
+git push -f https://github.com/jr-repository/febri-web.git main:gh-pages
+cd -
+```
+
+### GitHub Repository Configuration
+
+After deploying:
+
+1. Go to your GitHub repository settings
+2. Navigate to "Pages" section
+3. Select the branch "gh-pages" as the source
+4. Save the changes
+
+Your site will be published at `https://jr-repository.github.io/febri-web/`
+
+## Project Structure
+
+- `/src/components` - Reusable UI components
+- `/src/components/sections` - Page sections
+- `/src/pages` - Main application pages
+- `/src/hooks` - Custom React hooks
+- `/src/lib` - Utility functions
+
+## Customization
+
+### Styling
+
+This project uses Tailwind CSS for styling. The main configuration is in `tailwind.config.ts`.
+
+### Adding Pages
+
+To add a new page:
+
+1. Create a new component in `/src/pages`
+2. Add the route in your routing configuration
+
+## License
+
+This project is licensed under the MIT License.
