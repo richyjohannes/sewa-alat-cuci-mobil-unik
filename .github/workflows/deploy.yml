@@ -28,7 +28,7 @@ jobs:
       - name: Build 🔧
         run: npm run build
         env:
-          VITE_BASE_PATH: /sewa-alat-cuci-mobil-unik
+          VITE_BASE_PATH: /febri-web
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
