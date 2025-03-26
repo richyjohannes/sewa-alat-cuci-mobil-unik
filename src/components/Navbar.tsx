@@ -38,6 +38,7 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Beranda', path: '/' },
     { name: 'Produk', path: '/products' },
+    { name: 'Service', path: '/service' },
     { name: 'Tentang Kami', path: '/about' },
     { name: 'Kontak', path: '/contact' },
   ];
@@ -47,7 +48,7 @@ const Navbar = () => {
       <div className="container-custom">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
-            <img src={logo} alt="MaxClean Logo" className="h-12 w-12 mr-2" />
+            <img src={logo} alt="MaxClean Logo" className="h-14 w-14 mr-2" />
             <div className="text-blue-dark font-bold text-xl md:text-2xl">
               <span className="text-gradient">MaxClean</span>
             </div>
@@ -79,7 +80,7 @@ const Navbar = () => {
                   : 'hover:bg-blue-light hover:bg-opacity-10 text-blue-medium'
                 }`}
             >
-              <ShoppingCart size={22} />
+              <ShoppingCart size={24} />
               {getTotalItems() > 0 && (
                 <span className="absolute -top-1 -right-1 bg-yellow text-blue-dark text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
                   {getTotalItems()}
@@ -93,7 +94,7 @@ const Navbar = () => {
               to="/cart" 
               className="relative mr-4 text-blue-dark"
             >
-              <ShoppingCart size={22} />
+              <ShoppingCart size={24} />
               {getTotalItems() > 0 && (
                 <span className="absolute -top-1 -right-1 bg-yellow text-blue-dark text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
                   {getTotalItems()}
@@ -105,7 +106,7 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-blue-dark focus:outline-none"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
