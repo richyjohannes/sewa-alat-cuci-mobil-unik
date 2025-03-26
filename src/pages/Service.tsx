@@ -65,6 +65,17 @@ const Service = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      
+      // Periksa ukuran file (maksimal 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File terlalu besar",
+          description: "Ukuran file maksimal 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       setSelectedFile(file);
       
       // Buat preview URL untuk gambar yang dipilih
@@ -86,7 +97,7 @@ const Service = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -101,35 +112,61 @@ const Service = () => {
       return;
     }
     
-    // Format pesan untuk WhatsApp
-    let message = `*Permintaan Service Baru*\n\n`;
-    message += `*Nama:* ${name}\n`;
-    message += `*Nama Alat:* ${deviceName}\n`;
-    message += `*Deskripsi Masalah:* ${issueDescription}\n`;
-    message += `*No. Telp:* ${phone}\n`;
-    message += selectedFile ? `*Lampiran Foto:* Sudah dilampirkan\n` : '';
-    
-    // Buka WhatsApp dengan pesan yang sudah disiapkan
-    const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/6281573635143?text=${encodedMessage}`, '_blank');
-    
-    // Reset form
-    setName('');
-    setDeviceName('');
-    setIssueDescription('');
-    setPhone('');
-    setSelectedFile(null);
-    setPreviewUrl(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    try {
+      // Format pesan untuk WhatsApp
+      let message = `*Permintaan Service Baru*\n\n`;
+      message += `*Nama:* ${name}\n`;
+      message += `*Nama Alat:* ${deviceName}\n`;
+      message += `*Deskripsi Masalah:* ${issueDescription}\n`;
+      message += `*No. Telp:* ${phone}\n`;
+      
+      // Tambahkan informasi tentang foto jika ada
+      if (selectedFile) {
+        message += `\n*Foto Alat:* Saya juga akan mengirimkan foto segera setelah chat ini.\n`;
+      }
+      
+      // Encode pesan untuk URL WhatsApp
+      const encodedMessage = encodeURIComponent(message);
+      
+      // Buka WhatsApp dengan pesan yang sudah disiapkan
+      window.open(`https://wa.me/6281573635143?text=${encodedMessage}`, '_blank');
+      
+      // Tampilkan instruksi jika ada foto
+      if (selectedFile) {
+        setTimeout(() => {
+          toast({
+            title: "Lampirkan Foto",
+            description: "Silakan lampirkan foto yang telah Anda pilih secara manual di WhatsApp yang baru saja terbuka.",
+            duration: 6000,
+          });
+        }, 500);
+      }
+      
+      // Reset form
+      setName('');
+      setDeviceName('');
+      setIssueDescription('');
+      setPhone('');
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      
+      toast({
+        title: "Permintaan service berhasil dikirim",
+        description: "Admin kami akan segera menghubungi Anda",
+      });
+    } catch (error) {
+      console.error("Error mengirim formulir:", error);
+      toast({
+        title: "Terjadi kesalahan",
+        description: "Gagal mengirim formulir, silakan coba lagi",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    toast({
-      title: "Permintaan service berhasil dikirim",
-      description: "Admin kami akan segera menghubungi Anda",
-    });
-    
-    setIsSubmitting(false);
   };
 
   // Layanan service yang tersedia
@@ -292,6 +329,11 @@ const Service = () => {
                       <p className="text-xs text-muted-foreground">
                         Format: JPEG, PNG, atau GIF. Maks. 5MB.
                       </p>
+                      {selectedFile && (
+                        <p className="text-xs text-blue-600 mt-1">
+                          *Foto akan dikirimkan melalui WhatsApp. Silakan lampirkan foto secara manual setelah formulir terkirim.
+                        </p>
+                      )}
                     </div>
                     
                     <Button 
